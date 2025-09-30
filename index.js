@@ -40,13 +40,3 @@ const onInput = debounce((e) => {
   fetchData({ s: e.target.value });
 });
 input.addEventListener("input", onInput);
-
-// const main = async () => {
-//   const searchResults = await fetchData({ s: "avengers" }); //"index" search
-//   console.log("Search results:", searchResults);
-
-//   const movieDetails = await fetchData({ i: "tt0848228" }); //"show" search
-//   console.log("Movie details:", movieDetails);
-// };
-
-// main();
