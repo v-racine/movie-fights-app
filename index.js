@@ -15,11 +15,19 @@ const fetchData = async (params) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data);
+    return data;
   } catch (error) {
     console.error("Could not fetch data:", error);
+    return null;
   }
 };
 
-fetchData({ s: "avengers" }); //"index" search
-fetchData({ i: "tt0848228" }); //"show" search
+const main = async () => {
+  const searchResults = await fetchData({ s: "avengers" }); //"index" search
+  console.log("Search results:", searchResults);
+
+  const movieDetails = await fetchData({ i: "tt0848228" }); //"show" search
+  console.log("Movie details:", movieDetails);
+};
+
+main();
