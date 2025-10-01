@@ -25,20 +25,21 @@ const fetchData = async (params) => {
 //autocomplete
 const input = document.querySelector("input");
 const onInput = debounce(async (e) => {
-  let movies = await fetchData({ s: e.target.value });
-  if (movies) {
-    for (let movie of movies) {
-      const div = document.createElement("div");
+  const target = document.querySelector("#target");
+  const movies = await fetchData({ s: e.target.value });
 
-      div.innerHTML = `
+  if (!movies) {
+    return;
+  }
+
+  for (let movie of movies) {
+    const div = document.createElement("div");
+
+    div.innerHTML = `
       <img src="${movie.Poster}" />
       <h1>${movie.Title}</h1>
     `;
-      const target = document.querySelector("#target");
-      target.appendChild(div);
-    }
-  } else {
-    movies = [];
+    target.appendChild(div);
   }
 });
 input.addEventListener("input", onInput);
