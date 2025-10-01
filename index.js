@@ -42,6 +42,7 @@ const resultsWrapper = document.querySelector(".results");
 const onInput = debounce(async (e) => {
   const movies = await fetchData({ s: e.target.value });
   if (!movies) {
+    dropdown.classList.remove("is-active");
     return;
   }
 
