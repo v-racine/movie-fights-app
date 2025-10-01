@@ -22,19 +22,7 @@ const fetchData = async (params) => {
   }
 };
 
-//autocomplete with debouncer
-const debounce = (func, delay = 1000) => {
-  let timeoutId;
-  return (...args) => {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
-    timeoutId = setTimeout(() => {
-      func.apply(null, args);
-    }, delay);
-  };
-};
-
+//autocomplete
 const input = document.querySelector("input");
 const onInput = debounce((e) => {
   fetchData({ s: e.target.value });
