@@ -80,5 +80,52 @@ document.addEventListener("click", (e) => {
 
 const onMovieSelect = async (movie) => {
   const movieData = await fetchData({ i: movie.imdbID });
+  const summary = document.querySelector("#summary");
+  summary.innerHTML = movieTemplate(movieData);
+
   console.log(movieData); //temporary for dev
+};
+
+const movieTemplate = (movieData) => {
+  return `
+    <article class="media>
+      <figure class=media-left">
+        <p class="image">
+          <img src="${movieData.Poster}" />
+        </p>
+      </figure>
+      <div class="media-content>
+        <div class="content">
+          <h1>${movieData.Title}</h1>
+          <h4>${movieData.Genre}</h4>
+          <p>${movieData.Plot}</p>
+        </div>
+      </div>
+    </article>
+
+    <article class="notification is-primary">
+      <p class="title">${movieData.Awards}</p>
+      <p class="subtitle">Awards</p>
+    </article>
+
+    <article class="notification is-primary">
+      <p class="title">${movieData.BoxOffice}</p>
+      <p class="sutitle">Box Office</p>
+    </article>
+
+    <article class="notification is-primary">
+      <p class="title">${movieData.Metascore}</p>
+      <p class="sutitle">Metascore</p>
+    </article>
+
+    <article class="notification is-primary">
+      <p class="title">${movieData.imdbRating}</p>
+      <p class="sutitle">IMDB Rating</p>
+    </article>
+
+    <article class="notification is-primary">
+      <p class="title">${movieData.imdbVotes}</p>
+      <p class="sutitle">IMDB Votes</p>
+    </article>
+  `;
 };
