@@ -54,7 +54,7 @@ createAutocomplete({
 
   onOptionSelect(movie) {
     const leftSummary = document.querySelector("#left-summary");
-    onMovieSelect(movie, leftSummary);
+    onMovieSelect(movie, leftSummary, "left");
   },
 });
 
@@ -64,14 +64,30 @@ createAutocomplete({
 
   onOptionSelect(movie) {
     const rightSummary = document.querySelector("#right-summary");
-    onMovieSelect(movie, rightSummary);
+    onMovieSelect(movie, rightSummary, "right");
   },
 });
 
+let leftMovie;
+let rightMovie;
 //selecting movie details
-const onMovieSelect = async (movie, summaryElement) => {
+const onMovieSelect = async (movie, summaryElement, side) => {
   const movieData = await fetchData({ i: movie.imdbID });
   summaryElement.innerHTML = movieTemplate(movieData);
+
+  if (side === "left") {
+    leftMovie = movieData;
+  } else {
+    rightMovie = movieData;
+  }
+
+  if (leftMovie && rightMovie) {
+    runComparison();
+  }
+};
+
+const runComparison = () => {
+  console.log("run for comparison!");
 };
 
 //rendering movie details
