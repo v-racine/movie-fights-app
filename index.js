@@ -1,6 +1,7 @@
 const movieURL = "http://www.omdbapi.com";
 const apiKey = "cf6ab924";
 
+//generic fetch for movie api
 const fetchData = async (params) => {
   try {
     const url = new URL(movieURL);
@@ -22,70 +23,59 @@ const fetchData = async (params) => {
   }
 };
 
-//autocomplete template
-const autocompleteRoot = document.querySelector(".autocomplete");
-autocompleteRoot.innerHTML = `
-  <label><b>Search For a Movie</b></label>
-  <input class="input" type="text" placeholder="Title" />
-  <div class="dropdown">
-    <div class="dropdown-menu">
-      <div class="dropdown-content results"></div>
-    </div>
-  </div>
-  <div id="target"></div>
-`;
-
-const input = document.querySelector("input");
-const dropdown = document.querySelector(".dropdown");
-const resultsWrapper = document.querySelector(".results");
-
-const onInput = debounce(async (e) => {
-  const data = await fetchData({ s: e.target.value });
-  const movies = data && data.Search;
-  if (!movies) {
-    dropdown.classList.remove("is-active");
-    return;
-  }
-
-  resultsWrapper.innerHTML = "";
-  dropdown.classList.add("is-active");
-
-  for (let movie of movies) {
-    const option = document.createElement("a");
+//autocomplete widget base
+const autoCompleteConfig = {
+  renderOption(movie) {
     const imgSrc = movie.Poster === "N/A" ? "" : movie.Poster;
-
-    option.classList.add("dropdown-item");
-    option.innerHTML = `
+    return `
       <img src="${imgSrc}" />
-      ${movie.Title}
+      ${movie.Title} (${movie.Year})
     `;
+  },
 
-    option.addEventListener("click", (e) => {
-      dropdown.classList.remove("is-active");
-      input.value = movie.Title;
-      onMovieSelect(movie);
-    });
+  inputValue(movie) {
+    return movie.Title;
+  },
 
-    resultsWrapper.appendChild(option);
-  }
+  fetchData: fetchData,
+};
+
+//generate two autocomplete widgets on page
+createAutocomplete({
+  ...autoCompleteConfig,
+  root: document.querySelector("#left-autocomplete"),
+
+  onOptionSelect(movie) {
+    const tutorialDiv = document.querySelector(".tutorial");
+    tutorialDiv.classList.add("is-hidden");
+
+    const leftSummary = document.querySelector("#left-summary");
+    onMovieSelect(movie, leftSummary);
+  },
 });
 
-input.addEventListener("input", onInput);
+createAutocomplete({
+  ...autoCompleteConfig,
+  root: document.querySelector("#right-autocomplete"),
 
-document.addEventListener("click", (e) => {
-  if (!autocompleteRoot.contains(e.target)) {
-    dropdown.classList.remove("is-active");
-  }
+  onOptionSelect(movie) {
+    const tutorialDiv = document.querySelector(".tutorial");
+    tutorialDiv.classList.add("is-hidden");
+
+    const rightSummary = document.querySelector("#right-summary");
+    onMovieSelect(movie, rightSummary);
+  },
 });
 
-const onMovieSelect = async (movie) => {
+//selecting movie details
+const onMovieSelect = async (movie, summaryElement) => {
   const movieData = await fetchData({ i: movie.imdbID });
-  const summary = document.querySelector("#summary");
-  summary.innerHTML = movieTemplate(movieData);
+  summaryElement.innerHTML = movieTemplate(movieData);
 
   console.log(movieData); //temporary for dev
 };
 
+//rendering movie details
 const movieTemplate = (movieData) => {
   return `
     <article class="media">
