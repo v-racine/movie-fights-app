@@ -103,7 +103,7 @@ const runComparison = () => {
     if (rightSideValue > leftSideValue) {
       leftStat.classList.remove("is-primary");
       leftStat.classList.add("is-warning");
-    } else {
+    } else if (leftSideValue > rightSideValue) {
       rightStat.classList.remove("is-primary");
       rightStat.classList.add("is-warning");
     }
@@ -112,9 +112,7 @@ const runComparison = () => {
 
 //rendering movie details
 const movieTemplate = (movieData) => {
-  const dollars = parseInt(
-    movieData.BoxOffice.replace(/\$/g, "").replace(/,/g, "")
-  );
+  const dollars = parseInt(movieData.BoxOffice.replace(/[$,]/g, ""));
   const metascore = parseInt(movieData.Metascore);
   const imdbRating = parseFloat(movieData.imdbRating);
   const imdbVotes = parseInt(movieData.imdbVotes.replace(/,/g, ""));
