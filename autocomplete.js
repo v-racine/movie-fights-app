@@ -5,6 +5,8 @@ const createAutocomplete = ({
   onOptionSelect,
   inputValue,
   fetchData,
+  fetchDataParams,
+  parseData,
 }) => {
   //autocomplete template
   root.innerHTML = `
@@ -23,8 +25,13 @@ const createAutocomplete = ({
   const resultsWrapper = root.querySelector(".results");
 
   const onInput = debounce(async (e) => {
-    const data = await fetchData({ s: e.target.value });
-    const items = data && data.Search;
+    const tutorialDiv = document.querySelector(".tutorial");
+    tutorialDiv.classList.add("is-hidden");
+
+    const params = fetchDataParams(e.target.value);
+    const data = await fetchData(params);
+    const items = parseData(data);
+
     if (!items) {
       dropdown.classList.remove("is-active");
       return;

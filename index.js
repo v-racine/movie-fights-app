@@ -15,7 +15,6 @@ const fetchData = async (params) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data); //temporary for dev
     return data;
   } catch (error) {
     console.error("Could not fetch data:", error);
@@ -38,6 +37,14 @@ const autoCompleteConfig = {
   },
 
   fetchData: fetchData,
+
+  fetchDataParams(inputValue) {
+    return { s: inputValue };
+  },
+
+  parseData(data) {
+    return data.Search;
+  },
 };
 
 //generate two autocomplete widgets on page
@@ -46,9 +53,6 @@ createAutocomplete({
   root: document.querySelector("#left-autocomplete"),
 
   onOptionSelect(movie) {
-    const tutorialDiv = document.querySelector(".tutorial");
-    tutorialDiv.classList.add("is-hidden");
-
     const leftSummary = document.querySelector("#left-summary");
     onMovieSelect(movie, leftSummary);
   },
@@ -59,9 +63,6 @@ createAutocomplete({
   root: document.querySelector("#right-autocomplete"),
 
   onOptionSelect(movie) {
-    const tutorialDiv = document.querySelector(".tutorial");
-    tutorialDiv.classList.add("is-hidden");
-
     const rightSummary = document.querySelector("#right-summary");
     onMovieSelect(movie, rightSummary);
   },
@@ -71,8 +72,6 @@ createAutocomplete({
 const onMovieSelect = async (movie, summaryElement) => {
   const movieData = await fetchData({ i: movie.imdbID });
   summaryElement.innerHTML = movieTemplate(movieData);
-
-  console.log(movieData); //temporary for dev
 };
 
 //rendering movie details
