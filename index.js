@@ -14,8 +14,8 @@ const fetchData = async (params) => {
       throw new Error(`HTTP error! Status: ${response.status}`);
     }
     const data = await response.json();
-    console.log(data.Search); //temporary for dev
-    return data.Search;
+    console.log(data); //temporary for dev
+    return data;
   } catch (error) {
     console.error("Could not fetch data:", error);
     return null;
@@ -40,7 +40,8 @@ const dropdown = document.querySelector(".dropdown");
 const resultsWrapper = document.querySelector(".results");
 
 const onInput = debounce(async (e) => {
-  const movies = await fetchData({ s: e.target.value });
+  const data = await fetchData({ s: e.target.value });
+  const movies = data && data.Search;
   if (!movies) {
     dropdown.classList.remove("is-active");
     return;
@@ -59,6 +60,12 @@ const onInput = debounce(async (e) => {
       ${movie.Title}
     `;
 
+    option.addEventListener("click", (e) => {
+      dropdown.classList.remove("is-active");
+      input.value = movie.Title;
+      onMovieSelect(movie);
+    });
+
     resultsWrapper.appendChild(option);
   }
 });
@@ -70,3 +77,8 @@ document.addEventListener("click", (e) => {
     dropdown.classList.remove("is-active");
   }
 });
+
+const onMovieSelect = async (movie) => {
+  const movieData = await fetchData({ i: movie.imdbID });
+  console.log(movieData); //temporary for dev
+};
