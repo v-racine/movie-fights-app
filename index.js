@@ -88,13 +88,13 @@ const onMovieSelect = async (movie) => {
 
 const movieTemplate = (movieData) => {
   return `
-    <article class="media>
-      <figure class=media-left">
+    <article class="media">
+      <figure class="media-left">
         <p class="image">
           <img src="${movieData.Poster}" />
         </p>
       </figure>
-      <div class="media-content>
+      <div class="media-content">
         <div class="content">
           <h1>${movieData.Title}</h1>
           <h4>${movieData.Genre}</h4>
@@ -110,22 +110,22 @@ const movieTemplate = (movieData) => {
 
     <article class="notification is-primary">
       <p class="title">${movieData.BoxOffice}</p>
-      <p class="sutitle">Box Office</p>
+      <p class="subtitle">Box Office</p>
     </article>
 
     <article class="notification is-primary">
       <p class="title">${movieData.Metascore}</p>
-      <p class="sutitle">Metascore</p>
+      <p class="subtitle">Metascore</p>
     </article>
 
     <article class="notification is-primary">
       <p class="title">${movieData.imdbRating}</p>
-      <p class="sutitle">IMDB Rating</p>
+      <p class="subtitle">IMDB Rating</p>
     </article>
 
     <article class="notification is-primary">
       <p class="title">${movieData.imdbVotes}</p>
-      <p class="sutitle">IMDB Votes</p>
+      <p class="subtitle">IMDB Votes</p>
     </article>
   `;
 };
