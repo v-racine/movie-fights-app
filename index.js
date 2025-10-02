@@ -41,7 +41,7 @@ const resultsWrapper = document.querySelector(".results");
 
 const onInput = debounce(async (e) => {
   const data = await fetchData({ s: e.target.value });
-  const movies = data.Search;
+  const movies = data && data.Search;
   if (!movies) {
     dropdown.classList.remove("is-active");
     return;
